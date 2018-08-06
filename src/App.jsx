@@ -1,13 +1,12 @@
-import React from 'react';
+import React, { Component, Fragment } from 'react';
 
 import ChatBar from './ChatBar.jsx';
 import Messages from './Messages.jsx';
 
-class App extends React.Component {
+class App extends Component {
   render() {
     return (
-      //<React.Fragment>
-      <span>
+      <Fragment>
         <nav className="navbar">
           <a href="/" className="navbar-brand">
             Chatty
@@ -15,8 +14,7 @@ class App extends React.Component {
         </nav>
         <Messages />
         <ChatBar />
-      </span>
-      //</React.Fragment>
+      </Fragment>
     );
   }
 }

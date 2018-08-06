@@ -1,16 +1,14 @@
-import React from 'react';
+import React, { Component, Fragment } from 'react';
 
 import Message from './Message.jsx';
 
-class Messages extends React.Component {
+class Messages extends Component {
   render() {
     return (
-      //<React.Fragment>
-      <span>
+      <Fragment>
         <Message />
         <Message />
-      </span>
-      //</React.Fragment>
+      </Fragment>
     );
   }
 }
