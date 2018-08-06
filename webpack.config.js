@@ -2,11 +2,9 @@ var path = require('path');
 var webpack = require('webpack');
 
 module.exports = {
+  mode: 'development',
   devtool: 'eval',
-  entry: [
-    'webpack-dev-server/client?http://localhost:3000',
-    './src/index.jsx'
-  ],
+  entry: ['webpack-dev-server/client?http://localhost:3000', './src/index.jsx'],
   output: {
     path: path.join(__dirname, 'dist'),
     filename: 'bundle.js',
@@ -21,11 +19,7 @@ module.exports = {
       },
       {
         test: /\.scss$/,
-        use: [
-          'style-loader',
-          'css-loader',
-          'sass-loader'
-        ]
+        use: ['style-loader', 'css-loader', 'sass-loader']
       }
     ]
   }
