@@ -41,7 +41,7 @@ class ChatBar extends Component {
 
   handleChangeContent(event) {
     this.setState({
-      content: event.target.value
+      content: event.target.value.trim()
     });
   }
 
