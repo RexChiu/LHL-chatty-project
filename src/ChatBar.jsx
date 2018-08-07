@@ -16,6 +16,10 @@ class ChatBar extends Component {
   handleKeyPress(event) {
     if (event.key === 'Enter') {
       event.preventDefault();
+      if (this.state.content === null) {
+        return;
+      }
+
       let message = {
         username: this.state.username,
         content: this.state.content

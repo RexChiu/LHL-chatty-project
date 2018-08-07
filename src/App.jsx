@@ -26,12 +26,16 @@ class App extends Component {
   }
 
   addMessage(message) {
+    //constructs message object from chatbar
     let newMessage = Object.assign({}, message);
     newMessage.id = new Date().toString(); //temp hardcoded id
     let currMessageList = this.state.messages.slice();
     currMessageList.push(newMessage);
 
-    this.setState({ messages: currMessageList });
+    //handles any username changes if any
+    let currentUser = message.username ? { name: message.username } : { name: null };
+
+    this.setState({ currentUser, messages: currMessageList });
   }
 
   componentDidMount() {
