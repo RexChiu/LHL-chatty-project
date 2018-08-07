@@ -11,14 +11,27 @@ class App extends Component {
       messages: [
         {
           username: 'Cats',
-          content: 'Has anyone seen my marbles?'
+          content: 'Has anyone seen my marbles?',
+          id: 'Cats'
         },
         {
           username: 'Anonymous',
-          content: 'No, I think you lost them. You lost your marbles Cats. You lost them for good.'
+          content: 'No, I think you lost them. You lost your marbles Cats. You lost them for good.',
+          id: 'Dogs'
         }
       ]
     };
+  }
+
+  componentDidMount() {
+    setTimeout(() => {
+      // Add a new message to the list of messages in the data store
+      const newMessage = { id: 'Alpacas', username: 'Michelle', content: 'Hello there!' };
+      const messages = this.state.messages.concat(newMessage);
+      // Update the state of the app component.
+      // Calling setState will trigger a call to render() in App and all child components.
+      this.setState({ messages: messages });
+    }, 3000);
   }
 
   render() {
@@ -29,7 +42,7 @@ class App extends Component {
             Chatty
           </a>
         </nav>
-        <MessageList />
+        <MessageList messageList={this.state.messages} />
         <ChatBar currentUser={this.state.currentUser} />
       </Fragment>
     );
