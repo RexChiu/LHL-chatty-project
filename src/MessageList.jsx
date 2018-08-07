@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 
 import Message from './Message.jsx';
 
-class Messages extends Component {
+class Messagelist extends Component {
   render() {
     let messages = this.props.messageList.map(message => {
       return <Message key={message.id} message={message} />;
@@ -11,4 +11,4 @@ class Messages extends Component {
     return <Fragment>{messages}</Fragment>;
   }
 }
-export default Messages;
+export default Messagelist;
