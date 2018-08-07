@@ -15,7 +15,10 @@ class ChatBar extends Component {
 
   _handleKeyPress(event) {
     if (event.key === 'Enter') {
-      console.log('Enter!');
+      event.preventDefault();
+      console.log('Username: ' + this.state.username);
+      console.log('Content: ' + this.state.content);
+      event.target.closest('footer').getElementsByClassName('chatbar-message')[0].value = '';
     }
   }
 
@@ -37,7 +40,7 @@ class ChatBar extends Component {
     const currentUser = this.props.currentUser;
     const currentName = currentUser.name;
     return (
-      <footer className="chatbar">
+      <footer onKeyPress={this._handleKeyPress} className="chatbar">
         <form>
           <input className="chatbar-username" onChange={this.handleChangeUsername} defaultValue={currentName} placeholder="Your Name (Optional)" />
         </form>
