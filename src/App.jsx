@@ -21,6 +21,16 @@ class App extends Component {
         }
       ]
     };
+
+    this.addMessage = this.addMessage.bind(this);
+  }
+
+  addMessage(message) {
+    let newMessage = Object.assign({}, message);
+    let currMessageList = this.state.messages.slice();
+    currMessageList.push(newMessage);
+
+    this.setState({ messages: currMessageList });
   }
 
   componentDidMount() {
@@ -43,7 +53,7 @@ class App extends Component {
           </a>
         </nav>
         <MessageList messageList={this.state.messages} />
-        <ChatBar currentUser={this.state.currentUser} />
+        <ChatBar addMessage={this.addMessage} currentUser={this.state.currentUser} />
       </Fragment>
     );
   }
