@@ -35,7 +35,7 @@ class ChatBar extends Component {
 
   handleChangeUsername(event) {
     this.setState({
-      username: event.target.value
+      username: event.target.value.trim()
     });
   }
 
@@ -46,12 +46,10 @@ class ChatBar extends Component {
   }
 
   render() {
-    const currentUser = this.props.currentUser;
-    const currentName = currentUser.name;
     return (
       <footer onKeyPress={this.handleKeyPress} className="chatbar">
         <form>
-          <input className="chatbar-username" onChange={this.handleChangeUsername} defaultValue={currentName} placeholder="Your Name (Optional)" />
+          <input className="chatbar-username" onChange={this.handleChangeUsername} defaultValue={this.state.username} placeholder="Your Name (Optional)" />
         </form>
         <input className="chatbar-message" onChange={this.handleChangeContent} placeholder="Type a message and hit ENTER" />
       </footer>
