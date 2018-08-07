@@ -27,6 +27,7 @@ class App extends Component {
 
   addMessage(message) {
     let newMessage = Object.assign({}, message);
+    newMessage.id = new Date().toString(); //temp hardcoded id
     let currMessageList = this.state.messages.slice();
     currMessageList.push(newMessage);
 
