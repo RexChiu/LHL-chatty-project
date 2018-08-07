@@ -15,7 +15,7 @@ class App extends Component {
           id: 'Cats'
         },
         {
-          username: 'Anonymous',
+          username: null,
           content: 'No, I think you lost them. You lost your marbles Cats. You lost them for good.',
           id: 'Dogs'
         }
@@ -39,7 +39,7 @@ class App extends Component {
       <Fragment>
         <nav className="navbar">
           <a href="/" className="navbar-brand">
-            Chatty
+            Catty
           </a>
         </nav>
         <MessageList messageList={this.state.messages} />
