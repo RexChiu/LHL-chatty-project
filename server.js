@@ -1,6 +1,7 @@
 // server.js
 
 const express = require('express');
+const WebSocket = require('ws');
 const SocketServer = require('ws').Server;
 const uuid = require('uuid/v4');
 
@@ -28,7 +29,12 @@ wss.on('connection', ws => {
     console.log(parsedMessage);
 
     let stringifyMessage = JSON.stringify(parsedMessage);
-    wss.clients.forEach(function each(client) {
+    // wss.clients.forEach(function each(client) {
+    //   if (client !== ws && client.readyState === WebSocket.OPEN) {
+    //     client.send(stringifyMessage);
+    //   }
+    // });
+    wss.clients.forEach(function(client) {
       if (client !== ws && client.readyState === WebSocket.OPEN) {
         client.send(stringifyMessage);
       }
