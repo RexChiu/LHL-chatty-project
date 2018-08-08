@@ -3,6 +3,8 @@ import React, { Component, Fragment } from 'react';
 import ChatBar from './ChatBar.jsx';
 import MessageList from './MessageList.jsx';
 
+var ws = new WebSocket('ws://localhost:3001');
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -21,7 +23,6 @@ class App extends Component {
         }
       ]
     };
-
     this.addMessage = this.addMessage.bind(this);
   }
 
@@ -35,10 +36,16 @@ class App extends Component {
     //handles any username changes if any
     let currentUser = message.username ? { name: message.username } : { name: null };
 
+    ws.send(JSON.stringify(message));
+
     this.setState({ currentUser, messages: currMessageList });
   }
 
   componentDidMount() {
+    ws.onopen = function(event) {
+      console.log('CLIENT CONNECTED');
+    };
+
     setTimeout(() => {
       // Add a new message to the list of messages in the data store
       const newMessage = { id: 'Alpacas', username: 'Michelle', content: 'Hello there!' };
