@@ -12,6 +12,7 @@ class App extends Component {
     };
     this.addMessage = this.addMessage.bind(this);
     this.handleMessage = this.handleMessage.bind(this);
+    this.changeUsername = this.changeUsername.bind(this);
   }
 
   componentDidMount() {
@@ -33,32 +34,57 @@ class App extends Component {
           </a>
         </nav>
         <MessageList messageList={this.state.messages} />
-        <ChatBar addMessage={this.addMessage} currentUser={this.state.currentUser} />
+        <ChatBar addMessage={this.addMessage} changeUsername={this.changeUsername} currentUser={this.state.currentUser} />
       </Fragment>
     );
   }
 
+  //sends new message to server
   addMessage(message) {
-    //constructs message object from chatbar
-    let newMessage = Object.assign({}, message);
-    newMessage.id = new Date().toString(); //temp hardcoded id
-    let currMessageList = this.state.messages.slice();
-    currMessageList.push(newMessage);
-
     //handles any username changes if any
-    let currentUser = message.username ? { name: message.username } : { name: null };
+    if (this.state.currentUser.name != message.username) {
+      console.log(`Username changed! Old: ${this.state.currentUser.name} New: ${message.username}`);
+      this.changeUsername(message.username);
+    }
+    message.type = 'new-message';
 
-    this.ws.send(JSON.stringify(message));
+    let outgoingMessage = {
+      type: 'new-message',
+      username: message.username,
+      content: message.content
+    };
+    console.log('Sending: ' + JSON.stringify(outgoingMessage));
+    this.ws.send(JSON.stringify(outgoingMessage));
+  }
 
-    this.setState({ currentUser, messages: currMessageList });
+  //sends new username to server
+  changeUsername(username) {
+    //sets username, sends to server
+    let outgoingMessage = {
+      type: 'change-username',
+      username: username
+    };
+    console.log('Sending: ' + JSON.stringify(outgoingMessage));
+    this.ws.send(JSON.stringify(outgoingMessage));
+
+    this.setState({ currentUser: username });
   }
 
   handleMessage(event) {
     let incomingMessage = JSON.parse(event.data);
-    console.log('Incoming Message: ' + JSON.stringify(incomingMessage));
-    let newMessageList = [...this.state.messages, incomingMessage];
-    console.log(newMessageList);
-    this.setState({ messages: newMessageList });
+    console.log('Incoming Message: ' + event.data);
+
+    switch (incomingMessage.type) {
+      case 'change-username':
+        console.log('username message');
+        break;
+      case 'new-message':
+        let newMessageList = [...this.state.messages, incomingMessage];
+        this.setState({ messages: newMessageList });
+        break;
+      default:
+        break;
+    }
   }
 }
 

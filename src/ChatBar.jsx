@@ -16,20 +16,24 @@ class ChatBar extends Component {
   handleKeyPress(event) {
     if (event.key === 'Enter') {
       event.preventDefault();
-      if (!this.state.content) {
+      console.log(event.target.className);
+      //if enter came from username input, send to app
+      if (event.target.className === 'chatbar-username') {
+        this.props.changeUsername(this.state.username);
+      } else if (!this.state.content) {
+        //ignores if content bar is empty
         return;
+      } else {
+        //sends message
+        let message = {
+          username: this.state.username ? this.state.username : null,
+          content: this.state.content
+        };
+        this.props.addMessage(message);
+        // clears content from state and DOM
+        event.target.closest('footer').getElementsByClassName('chatbar-message')[0].value = '';
+        this.setState({ content: null });
       }
-
-      let message = {
-        username: this.state.username ? this.state.username : null,
-        content: this.state.content
-      };
-
-      this.props.addMessage(message);
-
-      // clears content from state and DOM
-      event.target.closest('footer').getElementsByClassName('chatbar-message')[0].value = '';
-      this.setState({ content: null });
     }
   }
 
@@ -48,9 +52,7 @@ class ChatBar extends Component {
   render() {
     return (
       <footer onKeyPress={this.handleKeyPress} className="chatbar">
-        <form>
-          <input className="chatbar-username" onChange={this.handleChangeUsername} defaultValue={this.state.username} placeholder="Your Name (Optional)" />
-        </form>
+        <input className="chatbar-username" onChange={this.handleChangeUsername} defaultValue={this.state.username} placeholder="Your Name (Optional)" />
         <input className="chatbar-message" onChange={this.handleChangeContent} placeholder="Type a message and hit ENTER" />
       </footer>
     );
