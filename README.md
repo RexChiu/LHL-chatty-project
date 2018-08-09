@@ -6,7 +6,10 @@ This project uses React for the front end, and Node, Webpack, Babel, and Web Soc
 
 ## Final Product
 
-!["Screenshot of Main page"](url)
+!["Screenshot of Main page"](https://github.com/RexChiu/LHL-chatty-project/blob/master/chatty-client/docs/main-window.png)
+!["Screenshot of Username Change"](https://github.com/RexChiu/LHL-chatty-project/blob/master/chatty-client/docs/username-change-new-message.png)
+!["Screenshot of Multiple Users"](https://github.com/RexChiu/LHL-chatty-project/blob/master/chatty-client/docs/multiple-users.png)
+!["Screenshot of Inline Images"](https://github.com/RexChiu/LHL-chatty-project/blob/master/chatty-client/docs/inline-image.png)
 
 ## Dependencies
 
