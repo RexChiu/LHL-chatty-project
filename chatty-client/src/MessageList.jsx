@@ -7,7 +7,7 @@ function Messagelist(props) {
   let messages = props.messageList.map(message => {
     if (message.type == 'new-message') {
       return <Message key={message.id} message={message} />;
-    } else {
+    } else if (message.type == 'change-username') {
       return <SystemMessage key={message.id} message={message} />;
     }
   });
