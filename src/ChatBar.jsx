@@ -5,6 +5,7 @@ class ChatBar extends Component {
     super(props);
     this.state = {
       username: this.props.currentUser.name,
+      prevUsername: this.props.currentUser.name,
       content: null
     };
 
@@ -19,7 +20,8 @@ class ChatBar extends Component {
       console.log(event.target.className);
       //if enter came from username input, send to app
       if (event.target.className === 'chatbar-username') {
-        this.props.changeUsername(this.state.username);
+        this.props.changeUsername(this.state.username, this.state.prevUsername);
+        this.setState({ prevUsername: this.state.username });
       } else if (!this.state.content) {
         //ignores if content bar is empty
         return;

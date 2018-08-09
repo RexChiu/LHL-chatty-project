@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 
+import NavBar from './NavBar.jsx';
 import ChatBar from './ChatBar.jsx';
 import MessageList from './MessageList.jsx';
 
@@ -8,16 +9,13 @@ class App extends Component {
     super(props);
     this.state = {
       currentUser: { name: null }, // optional. if currentUser is not defined, it means the user is Anonymous
-      messages: []
+      messages: [],
+      numUsers: 0
     };
-    this.addMessage = this.addMessage.bind(this);
-    this.handleMessage = this.handleMessage.bind(this);
-    this.changeUsername = this.changeUsername.bind(this);
   }
 
   componentDidMount() {
-    let ws = new WebSocket('ws://localhost:3001');
-    this.ws = ws;
+    this.ws = new WebSocket('ws://localhost:3001');
     this.ws.onopen = function(event) {
       console.log('CLIENT CONNECTED');
     };
@@ -28,11 +26,7 @@ class App extends Component {
   render() {
     return (
       <Fragment>
-        <nav className="navbar">
-          <a href="/" className="navbar-brand">
-            Catty
-          </a>
-        </nav>
+        <NavBar numUsers={this.state.numUsers} />
         <MessageList messageList={this.state.messages} />
         <ChatBar addMessage={this.addMessage} changeUsername={this.changeUsername} currentUser={this.state.currentUser} />
       </Fragment>
@@ -40,12 +34,7 @@ class App extends Component {
   }
 
   //sends new message to server
-  addMessage(message) {
-    //handles any username changes if any
-    if (this.state.currentUser.name != message.username) {
-      console.log(`Username changed! Old: ${this.state.currentUser.name} New: ${message.username}`);
-      this.changeUsername(message.username);
-    }
+  addMessage = message => {
     message.type = 'new-message';
 
     let outgoingMessage = {
@@ -55,37 +44,46 @@ class App extends Component {
     };
     console.log('Sending: ' + JSON.stringify(outgoingMessage));
     this.ws.send(JSON.stringify(outgoingMessage));
-  }
+  };
 
   //sends new username to server
-  changeUsername(username) {
+  changeUsername = (username, prevUsername) => {
     //sets username, sends to server
     let outgoingMessage = {
       type: 'change-username',
-      username: username
+      username: username,
+      prevUsername: prevUsername
     };
     console.log('Sending: ' + JSON.stringify(outgoingMessage));
     this.ws.send(JSON.stringify(outgoingMessage));
 
     this.setState({ currentUser: username });
-  }
+  };
 
-  handleMessage(event) {
+  handleMessage = event => {
     let incomingMessage = JSON.parse(event.data);
     console.log('Incoming Message: ' + event.data);
+    let newMessageList = [];
+    let numUsers;
 
     switch (incomingMessage.type) {
       case 'change-username':
-        console.log('username message');
+        newMessageList = [...this.state.messages, incomingMessage];
+        this.setState({ messages: newMessageList });
         break;
       case 'new-message':
-        let newMessageList = [...this.state.messages, incomingMessage];
+        newMessageList = [...this.state.messages, incomingMessage];
         this.setState({ messages: newMessageList });
+        break;
+      case 'user-change':
+        numUsers = incomingMessage.numUsers;
+        this.setState({ numUsers: numUsers });
+        console.log(numUsers + ' Cats online.');
         break;
       default:
         break;
     }
-  }
+  };
 }
 
 export default App;
