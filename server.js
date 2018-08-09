@@ -21,6 +21,9 @@ const wss = new SocketServer({ server });
 //list of clients
 let connectedClients = [];
 
+//list of messages
+let messageList = [];
+
 // Possible Colors
 let colors = ['silver', 'purple', 'blue', 'navy', 'lime', 'red', 'aqua'];
 
@@ -33,11 +36,17 @@ wss.on('connection', ws => {
   ws.color = randomColor();
   connectedClients.push(ws);
 
-  connectionMessage = {
+  let connectionMessage = {
     type: 'user-change',
     numUsers: wss.clients.size
   };
   broadcastMessage(connectionMessage);
+
+  let currentMessages = {
+    type: 'current-messages',
+    messageList: messageList
+  };
+  ws.send(JSON.stringify(currentMessages));
 
   ws.on('message', message => {
     let parsedMessage = JSON.parse(message);
@@ -78,6 +87,7 @@ wss.on('connection', ws => {
 });
 
 function broadcastMessage(message) {
+  messageList.push(message);
   let stringifyMessage = JSON.stringify(message);
 
   connectedClients.forEach(function(client) {
