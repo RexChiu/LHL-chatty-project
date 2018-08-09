@@ -6,6 +6,8 @@ This project uses React for the front end, and Node, Webpack, Babel, and Web Soc
 
 ## Final Product
 
+### Screenshot of Main page
+
 !["Screenshot of Main page"](https://github.com/RexChiu/LHL-chatty-project/blob/master/chatty-client/docs/main-window.png)
 !["Screenshot of Username Change"](https://github.com/RexChiu/LHL-chatty-project/blob/master/chatty-client/docs/username-change-new-message.png)
 !["Screenshot of Multiple Users"](https://github.com/RexChiu/LHL-chatty-project/blob/master/chatty-client/docs/multiple-users.png)
@@ -31,3 +33,10 @@ This project uses React for the front end, and Node, Webpack, Babel, and Web Soc
 4.  Install dependencies using the `npm install` command inside chatty-client folder
 5.  Start the client webpack server using the `npm start` command in chatty-client.
 6.  Open a browser to http://localhost:3000
+
+## Features
+
+- Real time messages with web sockets
+- Ability to change username
+- Ability to have images inline with text
+- Ability to see the number of online users
