@@ -80,6 +80,9 @@ class App extends Component {
         this.setState({ numUsers: numUsers });
         console.log(numUsers + ' Cats online.');
         break;
+      case 'current-messages':
+        this.setState({ messages: incomingMessage.messageList });
+        break;
       default:
         break;
     }
