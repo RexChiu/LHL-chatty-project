@@ -57,7 +57,7 @@ class App extends Component {
     console.log('Sending: ' + JSON.stringify(outgoingMessage));
     this.ws.send(JSON.stringify(outgoingMessage));
 
-    this.setState({ currentUser: username });
+    this.setState({ currentUser: { name: username } });
   };
 
   handleMessage = event => {
