@@ -4,6 +4,7 @@ const express = require('express');
 const WebSocket = require('ws');
 const SocketServer = require('ws').Server;
 const uuid = require('uuid/v4');
+const randomColor = require('randomcolor');
 
 // Set the port to 3001
 const PORT = 3001;
@@ -17,11 +18,21 @@ const server = express()
 // Create the WebSockets server
 const wss = new SocketServer({ server });
 
+//list of clients
+let connectedClients = [];
+
+// Possible Colors
+let colors = ['silver', 'purple', 'blue', 'navy', 'lime', 'red', 'aqua'];
+
 // Set up a callback that will run when a client connects to the server
 // When a client connects they are assigned a socket, represented by
 // the ws parameter in the callback.
 wss.on('connection', ws => {
   console.log('Client connected of: ' + wss.clients.size);
+
+  ws.color = randomColor();
+  connectedClients.push(ws);
+
   connectionMessage = {
     type: 'user-change',
     numUsers: wss.clients.size
@@ -44,6 +55,7 @@ wss.on('connection', ws => {
         broadcastMessage(outgoingMessage);
         break;
       case 'new-message':
+        parsedMessage.color = ws.color;
         broadcastMessage(parsedMessage);
         break;
       default:
@@ -54,7 +66,9 @@ wss.on('connection', ws => {
   // Set up a callback for when a client closes the socket. This usually means they closed their browser.
   ws.on('close', () => {
     console.log('Client disconnected');
-    console.log('Client connected of: ' + wss.clients.size);
+
+    removeClient(ws);
+
     connectionMessage = {
       type: 'user-change',
       numUsers: wss.clients.size
@@ -66,10 +80,18 @@ wss.on('connection', ws => {
 function broadcastMessage(message) {
   let stringifyMessage = JSON.stringify(message);
 
-  wss.clients.forEach(function(client) {
+  connectedClients.forEach(function(client) {
     if (client.readyState === WebSocket.OPEN) {
       console.log('sending message');
       client.send(stringifyMessage);
     }
   });
+}
+
+function removeClient(client) {
+  for (let i = 0; i < connectedClients.length; i++) {
+    if (connectedClients[i] === client) {
+      connectedClients.slice(i, 1);
+    }
+  }
 }
