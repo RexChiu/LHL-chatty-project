@@ -21,7 +21,12 @@ const wss = new SocketServer({ server });
 // When a client connects they are assigned a socket, represented by
 // the ws parameter in the callback.
 wss.on('connection', ws => {
-  console.log('Client connected');
+  console.log('Client connected of: ' + wss.clients.size);
+  connectionMessage = {
+    type: 'user-change',
+    numUsers: wss.clients.size
+  };
+  broadcastMessage(connectionMessage);
 
   ws.on('message', message => {
     let parsedMessage = JSON.parse(message);
@@ -30,7 +35,13 @@ wss.on('connection', ws => {
 
     switch (parsedMessage.type) {
       case 'change-username':
-        broadcastMessage(parsedMessage);
+        let prevUsername = parsedMessage.prevUsername ? parsedMessage.prevUsername : 'AnonyCats';
+        let outgoingMessage = {
+          type: 'change-username',
+          content: `${prevUsername} has changed their name to ${parsedMessage.username}`,
+          id: parsedMessage.id
+        };
+        broadcastMessage(outgoingMessage);
         break;
       case 'new-message':
         broadcastMessage(parsedMessage);
@@ -41,7 +52,15 @@ wss.on('connection', ws => {
   });
 
   // Set up a callback for when a client closes the socket. This usually means they closed their browser.
-  ws.on('close', () => console.log('Client disconnected'));
+  ws.on('close', () => {
+    console.log('Client disconnected');
+    console.log('Client connected of: ' + wss.clients.size);
+    connectionMessage = {
+      type: 'user-change',
+      numUsers: wss.clients.size
+    };
+    broadcastMessage(connectionMessage);
+  });
 });
 
 function broadcastMessage(message) {
