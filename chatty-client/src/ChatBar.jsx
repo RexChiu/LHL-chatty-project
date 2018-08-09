@@ -23,6 +23,11 @@ class ChatBar extends Component {
         //ignores if content bar is empty
         return;
       } else {
+        //catches any sudden username changes
+        if (this.state.username !== this.state.prevUsername) {
+          this.props.changeUsername(this.state.username, this.state.prevUsername);
+          this.setState({ prevUsername: this.state.username });
+        }
         //sends message to server
         let message = {
           username: this.state.username ? this.state.username : null,
