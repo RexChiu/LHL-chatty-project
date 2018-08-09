@@ -40,3 +40,4 @@ This project uses React for the front end, and Node, Webpack, Babel, and Web Soc
 - Ability to change username
 - Ability to have jpg/png/gifs inline with text
 - Ability to see the number of online users
+- Ability to see previous messages from other users
