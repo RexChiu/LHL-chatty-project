@@ -33,28 +33,33 @@ let colors = ['silver', 'purple', 'blue', 'navy', 'lime', 'red', 'aqua'];
 wss.on('connection', ws => {
   console.log('Client connected of: ' + wss.clients.size);
 
+  //sets a random color for the client, and adds to client array
   ws.color = randomColor();
   connectedClients.push(ws);
 
+  //constructs and broadcasts message for the number of online users
   let connectionMessage = {
     type: 'user-change',
     numUsers: wss.clients.size
   };
   broadcastMessage(connectionMessage);
 
+  //constructs sends message for current message list
   let currentMessages = {
     type: 'current-messages',
     messageList: messageList
   };
   ws.send(JSON.stringify(currentMessages));
 
+  //handles on message
   ws.on('message', message => {
+    //parse and adds an id to every message
     let parsedMessage = JSON.parse(message);
     parsedMessage.id = uuid();
     console.log('Received: ' + message);
 
     switch (parsedMessage.type) {
-      case 'change-username':
+      case 'change-username': //if username change, constructs string to broadcast
         let prevUsername = parsedMessage.prevUsername ? parsedMessage.prevUsername : 'AnonyCats';
         let outgoingMessage = {
           type: 'change-username',
@@ -63,7 +68,7 @@ wss.on('connection', ws => {
         };
         broadcastMessage(outgoingMessage);
         break;
-      case 'new-message':
+      case 'new-message': //if new message, add client's color, and broadcasts
         parsedMessage.color = ws.color;
         broadcastMessage(parsedMessage);
         break;
@@ -78,6 +83,7 @@ wss.on('connection', ws => {
 
     removeClient(ws);
 
+    //constructs and broadcasts current number of users
     connectionMessage = {
       type: 'user-change',
       numUsers: wss.clients.size
@@ -86,6 +92,7 @@ wss.on('connection', ws => {
   });
 });
 
+//takes a message, stringify and broadcasts to all users
 function broadcastMessage(message) {
   messageList.push(message);
   let stringifyMessage = JSON.stringify(message);
@@ -98,6 +105,7 @@ function broadcastMessage(message) {
   });
 }
 
+//removes a client from the client array
 function removeClient(client) {
   for (let i = 0; i < connectedClients.length; i++) {
     if (connectedClients[i] === client) {
