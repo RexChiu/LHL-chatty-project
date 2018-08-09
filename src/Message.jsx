@@ -1,27 +1,29 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-class Message extends Component {
-  render() {
-    let username = this.props.message.username ? this.props.message.username : 'AnonyCats';
-    let inlineStyle = {
-      color: this.props.message.color
-    };
+function Message(props) {
+  //sets default username if not defined
+  let username = props.message.username ? props.message.username : 'AnonyCats';
+  //colors the username to be what the server says
+  let inlineStyle = {
+    color: props.message.color
+  };
 
-    let content = formatContent(this.props.message.content);
+  //sends message content to be formatted
+  let content = formatContent(props.message.content);
 
-    return (
-      <div className="message">
-        <span className="message-username" style={inlineStyle}>
-          {username}
-        </span>
-
-        <span className="message-content" dangerouslySetInnerHTML={{ __html: content }} />
-      </div>
-    );
-  }
+  return (
+    <div className="message">
+      <span className="message-username" style={inlineStyle}>
+        {username}
+      </span>
+      {/* since the image tags are dynamically generated, have to override react's automatic tag escaping */}
+      <span className="message-content" dangerouslySetInnerHTML={{ __html: content }} />
+    </div>
+  );
 }
 export default Message;
 
+//finds all instances of an image in the string, and puts a html image tag around it
 function formatContent(content) {
   let wordArr = content.split(' ');
 

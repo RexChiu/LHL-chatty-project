@@ -1,12 +1,10 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-class SystemMessage extends Component {
-  render() {
-    return (
-      <div className="message system">
-        <span className="notification-content">{this.props.message.content}</span>
-      </div>
-    );
-  }
+function SystemMessage(props) {
+  return (
+    <div className="message system">
+      <span className="notification-content">{props.message.content}</span>
+    </div>
+  );
 }
 export default SystemMessage;

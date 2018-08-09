@@ -8,16 +8,13 @@ class ChatBar extends Component {
       prevUsername: this.props.currentUser.name,
       content: null
     };
-
-    this.handleKeyPress = this.handleKeyPress.bind(this);
-    this.handleChangeUsername = this.handleChangeUsername.bind(this);
-    this.handleChangeContent = this.handleChangeContent.bind(this);
   }
 
-  handleKeyPress(event) {
+  //captures enter key
+  handleKeyPress = event => {
     if (event.key === 'Enter') {
       event.preventDefault();
-      console.log(event.target.className);
+
       //if enter came from username input, send to app
       if (event.target.className === 'chatbar-username') {
         this.props.changeUsername(this.state.username, this.state.prevUsername);
@@ -26,7 +23,7 @@ class ChatBar extends Component {
         //ignores if content bar is empty
         return;
       } else {
-        //sends message
+        //sends message to server
         let message = {
           username: this.state.username ? this.state.username : null,
           content: this.state.content
@@ -37,19 +34,21 @@ class ChatBar extends Component {
         this.setState({ content: null });
       }
     }
-  }
+  };
 
-  handleChangeUsername(event) {
+  //controlled input for username
+  handleChangeUsername = event => {
     this.setState({
       username: event.target.value.trim()
     });
-  }
+  };
 
-  handleChangeContent(event) {
+  //controlled input for content
+  handleChangeContent = event => {
     this.setState({
       content: event.target.value.trim()
     });
-  }
+  };
 
   render() {
     return (

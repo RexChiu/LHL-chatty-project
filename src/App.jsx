@@ -15,11 +15,13 @@ class App extends Component {
   }
 
   componentDidMount() {
+    //creates and binds the websocket to App
     this.ws = new WebSocket('ws://localhost:3001');
     this.ws.onopen = function(event) {
       console.log('CLIENT CONNECTED');
     };
 
+    //handles any incoming messages with own function
     this.ws.onmessage = this.handleMessage;
   }
 
@@ -67,25 +69,22 @@ class App extends Component {
     let numUsers;
 
     switch (incomingMessage.type) {
-      case 'change-username':
-        newMessageList = [...this.state.messages, incomingMessage];
-        this.setState({ messages: newMessageList });
-        break;
+      case 'change-username': //if change username or new messages received
       case 'new-message':
         newMessageList = [...this.state.messages, incomingMessage];
         this.setState({ messages: newMessageList });
         break;
-      case 'user-change':
+      case 'user-change': //if a user had connected/disconnected
         numUsers = incomingMessage.numUsers;
         this.setState({ numUsers: numUsers });
-        console.log(numUsers + ' Cats online.');
         break;
-      case 'current-messages':
+      case 'current-messages': //handles incoming initial messages payload
         this.setState({ messages: incomingMessage.messageList });
         break;
       default:
         break;
     }
+    window.scrollTo(0, document.body.scrollHeight); //scroll to bottom of page for any new messages
   };
 }
 
